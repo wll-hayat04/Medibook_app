@@ -1,18 +1,24 @@
-FROM python:3.12-slim
+FROM python:3.11-slim
 
 WORKDIR /app
 
-RUN apt-get update && apt-get install -y build-essential gcc g++ python3-dev libffi-dev libssl-dev libjpeg-dev zlib1g-dev && rm -rf /var/lib/apt/lists/*
+RUN apt-get update && apt-get install -y \
+    build-essential \
+    gcc \
+    libpq-dev \
+    libjpeg-dev \
+    zlib1g-dev \
+    && rm -rf /var/lib/apt/lists/*
 
-RUN pip install --upgrade pip setuptools wheel
+RUN pip install --upgrade pip
 
-RUN pip install torch==2.9.1+cpu --extra-index-url https://download.pytorch.org/whl/cpu
-
-COPY requirements_docker.txt .
-RUN pip install -r requirements_docker.txt
+COPY requirements.txt .
+RUN pip install -r requirements.txt
 
 COPY . .
 
-EXPOSE 8000
+RUN python manage.py collectstatic --noinput
 
-CMD ["sh", "-c", "python manage.py migrate && python manage.py loaddata fixtures/initial_data.json || true && python manage.py runserver 0.0.0.0:8000"]
+EXPOSE 8091
+
+CMD ["gunicorn", "medibook_project.wsgi:application", "--bind", "0.0.0.0:8091"]
