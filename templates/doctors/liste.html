@@ -1,0 +1,85 @@
+{% extends 'base.html' %}
+{% block title %}Nos médecins — MediBook{% endblock %}
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
+        <div class="section-divider"></div>
+        <h2 class="section-title">Nos médecins</h2>
+        <p class="section-subtitle mb-0">{{ medecins.count }} médecin(s) disponible(s)</p>
+    </div>
+</div>
+
+<div class="card-medibook p-3 mb-4">
+    <form method="get" class="row g-2 align-items-center">
+        <div class="col-md-5">
+            <div class="input-group">
+                <span class="input-group-text bg-white border-end-0">
+                    <i class="bi bi-search text-muted"></i>
+                </span>
+                <input type="text" name="q" class="form-control border-start-0"
+                       placeholder="Rechercher un médecin..." value="{{ recherche|default:'' }}">
+            </div>
+        </div>
+        <div class="col-md-4">
+            <select name="specialite" class="form-select">
+                <option value="">Toutes les spécialités</option>
+                {% for s in specialites %}
+                    <option value="{{ s.id }}">{{ s.nom }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <div class="col-md-3">
+            <button type="submit" class="btn-primary-medibook w-100">
+                <i class="bi bi-search"></i> Rechercher
+            </button>
+        </div>
+    </form>
+</div>
+
+<div class="row g-4">
+    {% for medecin in medecins %}
+    <div class="col-md-4 col-lg-3">
+        <div class="doctor-card h-100">
+            <div class="doctor-card-header">
+                {% if medecin.photo %}
+                    <img src="{{ medecin.photo.url }}" class="doctor-avatar" alt="{{ medecin }}">
+                {% else %}
+                    <div class="doctor-avatar-placeholder">👨‍⚕️</div>
+                {% endif %}
+            </div>
+            <div class="doctor-card-body">
+                <!-- Nom complet du médecin -->
+                <h6 class="doctor-name">{{ medecin.user.get_full_name }}</h6>
+
+                <!-- Spécialité --> 
+                <p class="doctor-specialite">
+                    <i class="bi bi-award"></i> {{ medecin.specialite.nom|default:"Aucune spécialité" }}
+                </p>
+
+                <!-- Téléphone -->
+                <p class="doctor-telephone">{{ medecin.telephone|default:"Non renseigné" }}</p>
+                <div class="doctor-info-item">
+                    <i class="bi bi-geo-alt"></i>
+                    {{ medecin.adresse_cabinet|default:"Cabinet médical"|truncatechars:35 }}
+                </div>
+                <div class="doctor-info-item">
+                    <i class="bi bi-briefcase"></i>
+                    {{ medecin.annees_experience }} ans d'expérience
+                </div>
+                <a href="{% url 'detail_medecin' medecin.pk %}" class="btn-rdv">
+                    Voir le profil <i class="bi bi-arrow-right"></i>
+                </a>
+            </div>
+        </div>
+    </div>
+    {% empty %}
+        <div class="col-12">
+            <div class="card-medibook p-5 text-center">
+                <div style="font-size:4rem">🔍</div>
+                <h5 class="mt-3" style="color:var(--primary)">Aucun médecin trouvé</h5>
+                <p class="text-muted">Essayez avec d'autres critères de recherche.</p>
+            </div>
+        </div>
+    {% endfor %}
+</div>
+{% endblock %}

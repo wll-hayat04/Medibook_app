@@ -1,0 +1,46 @@
+{% extends 'base.html' %}
+{% block title %}Résumé consultation — MediBook{% endblock %}
+{% block content %}
+<div class="row justify-content-center">
+  <div class="col-md-7">
+    <div class="card-medibook p-4">
+      <h4 class="fw-bold mb-4" style="color:var(--primary)">
+        <i class="bi bi-file-medical"></i> Résumé de consultation
+      </h4>
+      <div class="p-3 rounded mb-4" style="background:var(--accent)">
+        <div class="row">
+          <div class="col-md-6">
+            <p class="mb-1"><strong>Patient :</strong> {{ rdv.patient.first_name }} {{ rdv.patient.last_name }}</p>
+            <p class="mb-0"><strong>Motif :</strong> {{ rdv.motif }}</p>
+          </div>
+          <div class="col-md-6">
+            <p class="mb-1"><strong>Date :</strong> {{ rdv.date|date:'d/m/Y' }}</p>
+            <p class="mb-0"><strong>Heure :</strong> {{ rdv.heure|time:'H:i' }}</p>
+          </div>
+        </div>
+      </div>
+      <form method="post">
+        {% csrf_token %}
+        <div class="mb-4">
+          <label class="form-label fw-semibold">Résumé administratif</label>
+          <textarea name="resume" class="form-control form-control-medibook"
+                    rows="6"
+                    placeholder="Notes administratives, observations générales...">{% if rdv.consultation %}{{ rdv.consultation.resume }}{% endif %}</textarea>
+          <small class="text-muted">
+            <i class="bi bi-info-circle"></i>
+            Ne pas inclure de diagnostics médicaux détaillés.
+          </small>
+        </div>
+        <div class="d-flex gap-3">
+          <button type="submit" class="btn-success-medibook">
+            <i class="bi bi-check-circle"></i> Enregistrer et terminer
+          </button>
+          <a href="{% url 'rdv_medecin' %}" class="btn btn-outline-secondary rounded-pill px-4">
+            Annuler
+          </a>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+{% endblock %}

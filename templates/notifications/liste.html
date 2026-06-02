@@ -1,0 +1,41 @@
+{% extends 'base.html' %}
+{% block title %}Notifications — MediBook{% endblock %}
+{% block content %}
+<div class="row justify-content-center">
+  <div class="col-md-8">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+      <div>
+        <div class="section-divider"></div>
+        <h2 class="section-title">Mes notifications</h2>
+      </div>
+    </div>
+
+    {% if notifications %}
+      {% for notif in notifications %}
+      <div class="card-medibook p-3 mb-3 d-flex align-items-start gap-3
+                  {% if not notif.lu %}border-start border-primary border-3{% endif %}">
+        <div class="rounded-circle d-flex align-items-center justify-content-center flex-shrink-0"
+             style="width:45px;height:45px;background:var(--accent)">
+          <i class="bi bi-bell-fill text-primary"></i>
+        </div>
+        <div class="flex-grow-1">
+          <p class="mb-1 {% if not notif.lu %}fw-bold{% endif %}">{{ notif.message }}</p>
+          <small class="text-muted">
+            <i class="bi bi-clock"></i> {{ notif.date_creation|date:'d/m/Y à H:i' }}
+          </small>
+        </div>
+        {% if not notif.lu %}
+          <span class="badge bg-primary">Nouveau</span>
+        {% endif %}
+      </div>
+      {% endfor %}
+    {% else %}
+      <div class="card-medibook p-5 text-center">
+        <div style="font-size:4rem">🔔</div>
+        <h5 class="mt-3" style="color:var(--primary)">Aucune notification</h5>
+        <p class="text-muted">Vous n'avez pas encore de notifications.</p>
+      </div>
+    {% endif %}
+  </div>
+</div>
+{% endblock %}

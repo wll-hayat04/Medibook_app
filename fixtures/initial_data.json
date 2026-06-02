@@ -1,0 +1,398 @@
+[
+{
+  "model": "doctors.medecin",
+  "pk": 16,
+  "fields": {
+    "user": 26,
+    "specialite": 1,
+    "telephone": "0600000001"
+  }
+},
+{
+  "model": "doctors.medecin",
+  "pk": 17,
+  "fields": {
+    "user": 27,
+    "specialite": 2,
+    "telephone": "0600000002"
+  }
+},
+{
+  "model": "doctors.medecin",
+  "pk": 18,
+  "fields": {
+    "user": 28,
+    "specialite": 3,
+    "telephone": "0600000003"
+  }
+},
+{
+  "model": "doctors.medecin",
+  "pk": 19,
+  "fields": {
+    "user": 29,
+    "specialite": 4,
+    "telephone": "0600000004"
+  }
+},
+{
+  "model": "doctors.medecin",
+  "pk": 20,
+  "fields": {
+    "user": 30,
+    "specialite": 5,
+    "telephone": "0600000005"
+  }
+},
+{
+  "model": "accounts.customuser",
+  "pk": 6,
+  "fields": {
+    "password": "pbkdf2_sha256$1000000$ZtyYTFoVfrCvNg6f5OEcmw$6H+dGs3trgRwl2Ol3QYhyFPi51ckmj1Xe2FzoZmRtFQ=",
+    "last_login": "2026-05-31T12:39:06.589Z",
+    "is_superuser": false,
+    "username": "Mohammed",
+    "first_name": "Mohammed",
+    "last_name": "ouahmi",
+    "email": "ndht150@gmail.com",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2026-05-31T12:39:05.711Z",
+    "role": "patient",
+    "telephone": "",
+    "photo": "",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "accounts.customuser",
+  "pk": 7,
+  "fields": {
+    "password": "pbkdf2_sha256$1000000$aRMUs8esruevZXRULFS0KN$MuB21BC38cTjpxBkeqHlAW7ydYq/R+Br51zGpsSH/eQ=",
+    "last_login": null,
+    "is_superuser": false,
+    "username": "dr.berrada",
+    "first_name": "Amine",
+    "last_name": "Berrada",
+    "email": "dr.berrada@medibook.ma",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2026-05-31T13:07:51.748Z",
+    "role": "medecin",
+    "telephone": "",
+    "photo": "",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "accounts.customuser",
+  "pk": 21,
+  "fields": {
+    "password": "pbkdf2_sha256$1000000$avRkQkK5rFC1JwZBnZN5DT$tWRRjK7MU3NDfKajsVekx1PAk7qAdVfOApNMjhp6qCw=",
+    "last_login": null,
+    "is_superuser": false,
+    "username": "doc1_1780233654",
+    "first_name": "PrΘnom1",
+    "last_name": "Nom1",
+    "email": "",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2026-05-31T13:20:54.374Z",
+    "role": "patient",
+    "telephone": "",
+    "photo": "",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "accounts.customuser",
+  "pk": 22,
+  "fields": {
+    "password": "pbkdf2_sha256$1000000$RPAbcN9Equ2wwe2Js7jftE$P0+fUi/6CDI9NrGZf5o2cxp3ctahucobIVXr8TuQshk=",
+    "last_login": null,
+    "is_superuser": false,
+    "username": "doc2_1780233654",
+    "first_name": "PrΘnom2",
+    "last_name": "Nom2",
+    "email": "",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2026-05-31T13:20:55.064Z",
+    "role": "patient",
+    "telephone": "",
+    "photo": "",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "accounts.customuser",
+  "pk": 23,
+  "fields": {
+    "password": "pbkdf2_sha256$1000000$o2gBuodpGskDHSEMijHKXv$wv+rcM34bVxkk2SmYAM6hkc5pGDKLzA8GM0Lz9WxF2Y=",
+    "last_login": null,
+    "is_superuser": false,
+    "username": "doc3_1780233654",
+    "first_name": "PrΘnom3",
+    "last_name": "Nom3",
+    "email": "",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2026-05-31T13:20:55.925Z",
+    "role": "patient",
+    "telephone": "",
+    "photo": "",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "accounts.customuser",
+  "pk": 24,
+  "fields": {
+    "password": "pbkdf2_sha256$1000000$VJTMEXLKgn0lg9XY0PjzdN$bIeIZ9fpPipzgm2W7dam2YJNtJcebwaU7t2zNPT9Kf0=",
+    "last_login": null,
+    "is_superuser": false,
+    "username": "doc4_1780233654",
+    "first_name": "PrΘnom4",
+    "last_name": "Nom4",
+    "email": "",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2026-05-31T13:20:56.685Z",
+    "role": "patient",
+    "telephone": "",
+    "photo": "",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "accounts.customuser",
+  "pk": 25,
+  "fields": {
+    "password": "pbkdf2_sha256$1000000$ayf96rl0pSAZiwriBQmHG6$cvat6D7BZpPhU3aV5CxXJzFqBYw0xGoT96rbCHlJMQU=",
+    "last_login": null,
+    "is_superuser": false,
+    "username": "doc5_1780233654",
+    "first_name": "PrΘnom5",
+    "last_name": "Nom5",
+    "email": "",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2026-05-31T13:20:57.383Z",
+    "role": "patient",
+    "telephone": "",
+    "photo": "",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "accounts.customuser",
+  "pk": 26,
+  "fields": {
+    "password": "pbkdf2_sha256$1000000$QOUOfngZ6tRztMTSKpFTix$KMl9Wt/4E2DNdXznfTlbERwRQb4CBN8lJtIDWC+xs/k=",
+    "last_login": null,
+    "is_superuser": false,
+    "username": "doc1_1780236301",
+    "first_name": "PrΘnom1",
+    "last_name": "Nom1",
+    "email": "",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2026-05-31T14:05:10.201Z",
+    "role": "patient",
+    "telephone": "",
+    "photo": "",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "accounts.customuser",
+  "pk": 27,
+  "fields": {
+    "password": "pbkdf2_sha256$1000000$CJ53k66pxhaBieqsZf1Byq$6Y1WPtY0VpsQLJxWmBIkyy34/gIv5B4GbkMmmMmsoYc=",
+    "last_login": null,
+    "is_superuser": false,
+    "username": "doc2_1780236301",
+    "first_name": "PrΘnom2",
+    "last_name": "Nom2",
+    "email": "",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2026-05-31T14:05:10.908Z",
+    "role": "patient",
+    "telephone": "",
+    "photo": "",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "accounts.customuser",
+  "pk": 28,
+  "fields": {
+    "password": "pbkdf2_sha256$1000000$WBXoFmfmkCmbJumdqSk6wg$Dge4i5/YPEkOP8oJU+7hvQJxRx5y39a9lltLLANuSlc=",
+    "last_login": null,
+    "is_superuser": false,
+    "username": "doc3_1780236301",
+    "first_name": "PrΘnom3",
+    "last_name": "Nom3",
+    "email": "",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2026-05-31T14:05:11.557Z",
+    "role": "patient",
+    "telephone": "",
+    "photo": "",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "accounts.customuser",
+  "pk": 29,
+  "fields": {
+    "password": "pbkdf2_sha256$1000000$726GhC1m5bReWa3yDZAOI2$GyIUpg0xba5XT0mQpWtHsqq7gnn2T6M3mvsEk7U3Y2k=",
+    "last_login": null,
+    "is_superuser": false,
+    "username": "doc4_1780236301",
+    "first_name": "PrΘnom4",
+    "last_name": "Nom4",
+    "email": "",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2026-05-31T14:05:12.216Z",
+    "role": "patient",
+    "telephone": "",
+    "photo": "",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "accounts.customuser",
+  "pk": 30,
+  "fields": {
+    "password": "pbkdf2_sha256$1000000$fCeiaepkuAumqb6ydQz1j7$Y5Ti2HdvrjgOPoONRZ5z7q+dCg30+pByUS8ZcJOPNBU=",
+    "last_login": null,
+    "is_superuser": false,
+    "username": "doc5_1780236301",
+    "first_name": "PrΘnom5",
+    "last_name": "Nom5",
+    "email": "",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2026-05-31T14:05:12.828Z",
+    "role": "patient",
+    "telephone": "",
+    "photo": "",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "ai_orientation.specialite",
+  "pk": 1,
+  "fields": {
+    "nom": "Cardiologie",
+    "description": "",
+    "icone": ""
+  }
+},
+{
+  "model": "ai_orientation.specialite",
+  "pk": 2,
+  "fields": {
+    "nom": "Dermatologie",
+    "description": "",
+    "icone": ""
+  }
+},
+{
+  "model": "ai_orientation.specialite",
+  "pk": 3,
+  "fields": {
+    "nom": "PΘdiatrie",
+    "description": "",
+    "icone": ""
+  }
+},
+{
+  "model": "ai_orientation.specialite",
+  "pk": 4,
+  "fields": {
+    "nom": "OrthopΘdie",
+    "description": "",
+    "icone": ""
+  }
+},
+{
+  "model": "ai_orientation.specialite",
+  "pk": 5,
+  "fields": {
+    "nom": "Ophtalmologie",
+    "description": "",
+    "icone": ""
+  }
+},
+{
+  "model": "ai_orientation.specialite",
+  "pk": 6,
+  "fields": {
+    "nom": "ORL",
+    "description": "",
+    "icone": ""
+  }
+},
+{
+  "model": "ai_orientation.specialite",
+  "pk": 7,
+  "fields": {
+    "nom": "Radiologie",
+    "description": "",
+    "icone": ""
+  }
+},
+{
+  "model": "ai_orientation.specialite",
+  "pk": 8,
+  "fields": {
+    "nom": "NΘphrologie",
+    "description": "",
+    "icone": ""
+  }
+},
+{
+  "model": "ai_orientation.specialite",
+  "pk": 9,
+  "fields": {
+    "nom": "HΘmatologie",
+    "description": "",
+    "icone": ""
+  }
+},
+{
+  "model": "ai_orientation.specialite",
+  "pk": 10,
+  "fields": {
+    "nom": "Psychiatrie",
+    "description": "",
+    "icone": ""
+  }
+},
+{
+  "model": "ai_orientation.specialite",
+  "pk": 11,
+  "fields": {
+    "nom": "Endocrinologie",
+    "description": "",
+    "icone": ""
+  }
+}
+]

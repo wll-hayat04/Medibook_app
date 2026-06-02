@@ -1,0 +1,66 @@
+{% extends 'base.html' %}
+{% block title %}Planning — MediBook{% endblock %}
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
+        <div class="section-divider"></div>
+        <h2 class="section-title">Mon planning de la semaine</h2>
+        <p class="section-subtitle mb-0">
+            Semaine du {{ debut_semaine|date:'d/m/Y' }}
+        </p>
+    </div>
+    <a href="{% url 'rdv_medecin' %}" class="btn-primary-medibook text-decoration-none">
+        <i class="bi bi-list"></i> Tous mes RDV
+    </a>
+</div>
+
+<div class="row g-3">
+    {% for jour in jours %}
+    <div class="col-md-6 col-lg-4">
+        <div class="card-medibook h-100">
+            <div class="p-3 {% if jour.date == today %}fw-bold{% endif %}"
+                 style="background:{% if jour.rdv %}var(--accent){% else %}var(--light-bg){% endif %};
+                        border-radius:12px 12px 0 0">
+                <div class="d-flex justify-content-between align-items-center">
+                    <span class="fw-bold" style="color:var(--primary)">
+                        {{ jour.date|date:'l d/m' }}
+                    </span>
+                    <span class="badge-specialite" style="font-size:0.75rem">
+                        {{ jour.rdv.count }} RDV
+                    </span>
+                </div>
+            </div>
+            <div class="p-3">
+                {% if jour.rdv %}
+                    {% for rdv in jour.rdv %}
+                    <div class="d-flex align-items-center gap-2 p-2 mb-2 rounded"
+                         style="background:var(--light-bg)">
+                        <span class="fw-bold text-primary" style="min-width:45px">
+                            {{ rdv.heure|time:'H:i' }}
+                        </span>
+                        <div>
+                            <div class="small fw-bold">
+                                {{ rdv.patient.first_name }} {{ rdv.patient.last_name }}
+                            </div>
+                            <div class="text-muted" style="font-size:0.75rem">
+                                {{ rdv.motif|truncatechars:25 }}
+                            </div>
+                        </div>
+                        {% if rdv.statut == 'confirme' %}
+                            <span class="ms-auto badge-confirme" style="font-size:0.7rem">✓</span>
+                        {% else %}
+                            <span class="ms-auto badge-en_attente" style="font-size:0.7rem">⏳</span>
+                        {% endif %}
+                    </div>
+                    {% endfor %}
+                {% else %}
+                    <p class="text-muted small text-center py-2 mb-0">
+                        Aucun RDV
+                    </p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% endblock %}

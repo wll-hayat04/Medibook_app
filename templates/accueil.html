@@ -1,0 +1,135 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}MediBook - Accueil{% endblock %}
+
+{% block full_content %}
+<section class="hero-section">
+    <div class="container position-relative">
+        <div class="row align-items-center">
+            <div class="col-lg-6">
+                <div class="hero-badge">
+                    <i class="bi bi-shield-check text-success"></i>
+                    Plateforme certifiée et sécurisée
+                </div>
+                <h1 class="hero-title">
+                    Votre santé,<br>notre <span>priorité</span>
+                </h1>
+                <p class="hero-subtitle">
+                    Prenez rendez-vous avec les meilleurs médecins en quelques clics.
+                    Notre IA vous oriente vers la bonne spécialité.
+                </p>
+                <div class="d-flex gap-3 flex-wrap">
+                    <a href="{% url 'inscription' %}" class="btn-hero-primary">
+                        <i class="bi bi-person-plus"></i> Créer un compte
+                    </a>
+                    <a href="{% url 'liste_medecins' %}" class="btn-hero-secondary">
+                        <i class="bi bi-search"></i> Trouver un médecin
+                    </a>
+                    <a href="/ai/chatbot/" class="btn-hero-primary">
+                        <i class="bi bi-robot"></i> Assistant IA
+                    </a>
+                </div>
+            </div>
+            <div class="col-lg-6 text-center d-none d-lg-block">
+                <div style="font-size:12rem; opacity:0.15;">🏥</div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<div class="stats-bar">
+    <div class="container">
+        <div class="row">
+            <div class="col-3 stat-item">
+                <span class="stat-number">500+</span>
+                <span class="stat-label">Médecins</span>
+            </div>
+            <div class="col-3 stat-item">
+                <span class="stat-number">10K+</span>
+                <span class="stat-label">Patients</span>
+            </div>
+            <div class="col-3 stat-item">
+                <span class="stat-number">15+</span>
+                <span class="stat-label">Spécialités</span>
+            </div>
+            <div class="col-3 stat-item">
+                <span class="stat-number">98%</span>
+                <span class="stat-label">Satisfaction</span>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="container my-5">
+    <div class="text-center mb-5">
+        <div class="section-divider mx-auto"></div>
+        <h2 class="section-title">Comment ça marche ?</h2>
+        <p class="section-subtitle">3 étapes simples pour prendre votre rendez-vous</p>
+    </div>
+    <div class="row g-4">
+        <div class="col-md-4">
+            <div class="card-medibook p-4 text-center h-100">
+                <div style="font-size:3rem; margin-bottom:1rem;">👤</div>
+                <h5 class="fw-bold" style="color:var(--primary)">1. Créez votre compte</h5>
+                <p class="text-muted">Inscrivez-vous en quelques secondes et accédez à tous les médecins disponibles.</p>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card-medibook p-4 text-center h-100">
+                <div style="font-size:3rem; margin-bottom:1rem;">🔍</div>
+                <h5 class="fw-bold" style="color:var(--primary)">2. Trouvez votre médecin</h5>
+                <p class="text-muted">Recherchez par spécialité ou laissez notre IA vous orienter vers le bon spécialiste.</p>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card-medibook p-4 text-center h-100">
+                <div style="font-size:3rem; margin-bottom:1rem;">📅</div>
+                <h5 class="fw-bold" style="color:var(--primary)">3. Réservez votre créneau</h5>
+                <p class="text-muted">Choisissez la date et l'heure qui vous conviennent et confirmez votre rendez-vous.</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="text-center mt-5">
+        <div class="section-divider mx-auto"></div>
+        <h2 class="section-title">Nos spécialités</h2>
+        <p class="section-subtitle">Accédez aux meilleurs spécialistes</p>
+        <div class="d-flex flex-wrap justify-content-center gap-3 mt-3">
+            <span class="badge-specialite">Cardiologie</span>
+            <span class="badge-specialite">Dermatologie</span>
+            <span class="badge-specialite">Pédiatrie</span>
+            <span class="badge-specialite">Gynécologie</span>
+            <span class="badge-specialite">Ophtalmologie</span>
+            <span class="badge-specialite">Dentisterie</span>
+            <span class="badge-specialite">ORL</span>
+            <span class="badge-specialite">Neurologie</span>
+            <span class="badge-specialite">Médecine générale</span>
+            <span class="badge-specialite">Radiologie</span>
+        </div>
+        <a href="{% url 'liste_medecins' %}" class="btn-hero-primary d-inline-block mt-4">
+            Voir tous nos médecins <i class="bi bi-arrow-right"></i>
+        </a>
+    </div>
+
+    <div class="text-center mt-5">
+        <div class="section-divider mx-auto"></div>
+        <h2 class="section-title">Notre fonctionnalité IA</h2>
+        <p class="section-subtitle">Laissez l'intelligence artificielle vous orienter</p>
+        <div class="row justify-content-center mt-4">
+            <div class="col-md-8">
+                <div class="ai-card">
+                    <h4 class="fw-bold mb-2">🤖 Orientation intelligente</h4>
+                    <p class="opacity-75 mb-3">
+                        Décrivez vos symptômes et notre IA analyse votre texte
+                        avec TF-IDF et similarité cosinus pour vous orienter
+                        vers la bonne spécialité médicale.
+                    </p>
+                    <a href="{% url 'ai_orientation' %}" class="btn-hero-primary">
+                        Essayer maintenant <i class="bi bi-arrow-right"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

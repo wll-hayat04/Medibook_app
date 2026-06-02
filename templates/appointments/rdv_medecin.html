@@ -1,0 +1,137 @@
+{% extends 'base.html' %}
+{% block title %}Mes patients — MediBook{% endblock %}
+{% block content %}
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
+        <div class="section-divider"></div>
+        <h2 class="section-title">Mes rendez-vous</h2>
+        <p class="section-subtitle mb-0">Gérez vos patients et consultations</p>
+    </div>
+    <a href="{% url 'planning_medecin' %}" class="btn-success-medibook text-decoration-none">
+        <i class="bi bi-calendar-week"></i> Planning semaine
+    </a>
+</div>
+
+{% if rdv_list %}
+<div class="card-medibook p-3 mb-4">
+    <div class="d-flex gap-2 flex-wrap align-items-center">
+        <span class="fw-semibold text-muted me-2">Filtrer :</span>
+        <a href="{% url 'rdv_medecin' %}"
+           class="btn btn-sm btn-outline-primary rounded-pill px-3">Tous</a>
+        <a href="{% url 'rdv_medecin' %}?statut=en_attente"
+           class="btn btn-sm btn-outline-warning rounded-pill px-3">En attente</a>
+        <a href="{% url 'rdv_medecin' %}?statut=confirme"
+           class="btn btn-sm btn-outline-success rounded-pill px-3">Confirmés</a>
+        <a href="{% url 'rdv_medecin' %}?statut=termine"
+           class="btn btn-sm btn-outline-secondary rounded-pill px-3">Terminés</a>
+    </div>
+</div>
+
+<div class="card-medibook">
+    <div class="table-responsive">
+        <table class="table table-medibook mb-0">
+            <thead>
+                <tr>
+                    <th>Patient</th>
+                    <th>Date</th>
+                    <th>Heure</th>
+                    <th>Motif</th>
+                    <th>Statut</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for rdv in rdv_list %}
+                <tr>
+                    <td>
+                        <div class="d-flex align-items-center gap-2">
+                            <div class="rounded-circle d-flex align-items-center justify-content-center flex-shrink-0"
+                                 style="width:35px;height:35px;background:var(--accent)">
+                                <i class="bi bi-person text-primary"></i>
+                            </div>
+                            <div>
+                                <div class="fw-semibold">
+                                    {{ rdv.patient.first_name }} {{ rdv.patient.last_name }}
+                                </div>
+                                <small class="text-muted">{{ rdv.patient.telephone }}</small>
+                            </div>
+                        </div>
+                    </td>
+                    <td class="fw-bold text-primary">{{ rdv.date|date:'d/m/Y' }}</td>
+                    <td>
+                        <i class="bi bi-clock text-muted"></i>
+                        {{ rdv.heure|time:'H:i' }}
+                    </td>
+                    <td class="text-muted">{{ rdv.motif|truncatechars:30 }}</td>
+                    <td>
+                        {% if rdv.statut == 'confirme' %}
+                            <span class="badge-confirme">
+                                <i class="bi bi-check-circle"></i> Confirmé
+                            </span>
+                        {% elif rdv.statut == 'en_attente' %}
+                            <span class="badge-en_attente">
+                                <i class="bi bi-clock"></i> En attente
+                            </span>
+                        {% elif rdv.statut == 'annule' %}
+                            <span class="badge-annule">
+                                <i class="bi bi-x-circle"></i> Annulé
+                            </span>
+                        {% elif rdv.statut == 'termine' %}
+                            <span class="badge-termine">
+                                <i class="bi bi-check-all"></i> Terminé
+                            </span>
+                        {% elif rdv.statut == 'absent' %}
+                            <span class="badge bg-dark text-white px-2 py-1 rounded-pill"
+                                  style="font-size:0.8rem">
+                                <i class="bi bi-person-x"></i> Absent
+                            </span>
+                        {% endif %}
+                    </td>
+                    <td>
+                        <div class="d-flex gap-1 flex-wrap">
+                            {% if rdv.statut == 'en_attente' %}
+                                <a href="{% url 'confirmer_rdv' rdv.pk %}"
+                                   class="btn btn-sm btn-success"
+                                   title="Confirmer">
+                                    <i class="bi bi-check-circle"></i>
+                                </a>
+                            {% endif %}
+                            {% if rdv.statut == 'en_attente' or rdv.statut == 'confirme' %}
+                                <a href="{% url 'ajouter_consultation' rdv.pk %}"
+                                   class="btn btn-sm btn-outline-primary"
+                                   title="Résumé consultation">
+                                    <i class="bi bi-file-medical"></i>
+                                </a>
+                                <a href="{% url 'marquer_absent' rdv.pk %}"
+                                   class="btn btn-sm btn-outline-dark"
+                                   title="Marquer absent"
+                                   onclick="return confirm('Marquer ce patient comme absent ?')">
+                                    <i class="bi bi-person-x"></i>
+                                </a>
+                            {% endif %}
+                            {% if rdv.statut == 'termine' %}
+                                <a href="{% url 'ajouter_consultation' rdv.pk %}"
+                                   class="btn btn-sm btn-outline-secondary"
+                                   title="Voir consultation">
+                                    <i class="bi bi-eye"></i>
+                                </a>
+                            {% endif %}
+                        </div>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+{% else %}
+<div class="card-medibook p-5 text-center">
+    <div style="font-size:4rem">📅</div>
+    <h5 class="mt-3 fw-bold" style="color:var(--primary)">Aucun rendez-vous</h5>
+    <p class="text-muted">Vous n'avez pas encore de rendez-vous.</p>
+</div>
+{% endif %}
+
+{% endblock %}

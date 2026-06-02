@@ -1,0 +1,101 @@
+{% extends 'base.html' %}
+{% block title %}Connexion — MediBook{% endblock %}
+{% block content %}
+<div class="row justify-content-center">
+  <div class="col-md-5">
+    <div class="card-medibook p-4">
+      <div class="text-center mb-4">
+        <div style="font-size:3rem">🔐</div>
+        <h3 class="fw-bold" style="color:var(--primary)">Connexion</h3>
+        <p class="text-muted">Accédez à votre espace MediBook</p>
+      </div>
+
+      <!-- Choix du rôle -->
+      <div class="d-flex gap-2 mb-4">
+        <button type="button" class="flex-fill p-3 rounded border-2 fw-bold role-btn active"
+                id="btn-patient" onclick="selectRole('patient')"
+                style="border:2px solid var(--primary);background:var(--accent);color:var(--primary);cursor:pointer">
+          👤 Patient
+        </button>
+        <button type="button" class="flex-fill p-3 rounded border-2 fw-bold role-btn"
+                id="btn-medecin" onclick="selectRole('medecin')"
+                style="border:2px solid var(--border);background:white;color:var(--text-muted);cursor:pointer">
+          👨‍⚕️ Médecin
+        </button>
+      </div>
+
+      <form method="post">
+        {% csrf_token %}
+        <input type="hidden" name="role_choisi" id="role_choisi" value="patient">
+        <div class="mb-3">
+          <label class="form-label fw-semibold">Nom d'utilisateur</label>
+          <input type="text" name="username" class="form-control form-control-medibook"
+                 required autofocus placeholder="Votre nom d'utilisateur">
+        </div>
+        <div class="mb-3">
+          <label class="form-label fw-semibold">Mot de passe</label>
+          <input type="password" name="password" class="form-control form-control-medibook"
+                 required placeholder="Votre mot de passe">
+        </div>
+        <div class="text-end mb-3">
+          <a href="{% url 'password_reset' %}" style="color:var(--primary);font-size:0.9rem">
+            Mot de passe oublié ?
+          </a>
+        </div>
+        <button type="submit" class="btn-primary-medibook w-100">
+          <i class="bi bi-box-arrow-in-right"></i> Se connecter
+        </button>
+      </form>
+      <p class="text-center mt-3 text-muted">
+        Pas de compte ? <a href="{% url 'inscription' %}" style="color:var(--primary)">S'inscrire</a>
+      </p>
+
+      <!-- Comptes de test -->
+      <div class="mt-4 p-3 rounded" style="background:var(--light-bg)">
+        <p class="fw-bold mb-2 small" style="color:var(--primary)">
+          <i class="bi bi-info-circle"></i> Comptes de test :
+        </p>
+        <div class="row g-2">
+          <div class="col-6">
+            <div class="p-2 rounded bg-white small">
+              <div class="fw-bold">👤 Patient</div>
+              <div class="text-muted">hayat.waldi</div>
+              <div class="text-muted">****</div>
+            </div>
+          </div>
+          <div class="col-6">
+            <div class="p-2 rounded bg-white small">
+              <div class="fw-bold">👨‍⚕️ Médecin</div>
+              <div class="text-muted">dr.benali</div>
+              <div class="text-muted">medecin1234</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+function selectRole(role) {
+    document.getElementById('role_choisi').value = role;
+    const btnPatient = document.getElementById('btn-patient');
+    const btnMedecin = document.getElementById('btn-medecin');
+    if (role === 'patient') {
+        btnPatient.style.border = '2px solid var(--primary)';
+        btnPatient.style.background = 'var(--accent)';
+        btnPatient.style.color = 'var(--primary)';
+        btnMedecin.style.border = '2px solid var(--border)';
+        btnMedecin.style.background = 'white';
+        btnMedecin.style.color = 'var(--text-muted)';
+    } else {
+        btnMedecin.style.border = '2px solid var(--primary)';
+        btnMedecin.style.background = 'var(--accent)';
+        btnMedecin.style.color = 'var(--primary)';
+        btnPatient.style.border = '2px solid var(--border)';
+        btnPatient.style.background = 'white';
+        btnPatient.style.color = 'var(--text-muted)';
+    }
+}
+</script>
+{% endblock %}

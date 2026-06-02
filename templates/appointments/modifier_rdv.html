@@ -1,0 +1,75 @@
+{% extends 'base.html' %}
+{% block title %}Modifier RDV — MediBook{% endblock %}
+{% block content %}
+<div class="row justify-content-center">
+  <div class="col-md-7">
+    <div class="card-medibook p-4">
+      <h4 class="mb-1 fw-bold" style="color:var(--primary)">
+        <i class="bi bi-pencil-square"></i> Modifier le rendez-vous
+      </h4>
+      <p class="text-muted mb-4">
+        Médecin : <strong>{{ medecin }}</strong> —
+        Spécialité : <strong>{{ medecin.specialite }}</strong>
+      </p>
+
+      <div class="p-3 rounded mb-4" style="background:var(--accent)">
+        <h6 class="fw-bold mb-2">RDV actuel :</h6>
+        <p class="mb-0 text-muted">
+          📅 {{ rdv.date|date:'d/m/Y' }} à {{ rdv.heure|time:'H:i' }}
+          — {{ rdv.motif|truncatechars:50 }}
+        </p>
+      </div>
+
+      <form method="post">
+        {% csrf_token %}
+        <div class="mb-3">
+          <label class="form-label fw-semibold">Nouvelle date</label>
+          <input type="date" name="date" class="form-control form-control-medibook"
+                 min="{{ aujourd_hui }}" value="{{ date_choisie|date:'Y-m-d'|default:'' }}"
+                 onchange="this.form.submit()">
+        </div>
+      </form>
+
+      {% if creneaux %}
+      <form method="post">
+        {% csrf_token %}
+        <input type="hidden" name="date" value="{{ date_choisie|date:'Y-m-d' }}">
+        <div class="mb-3">
+          <label class="form-label fw-semibold">Créneaux disponibles</label>
+          <div class="d-flex flex-wrap gap-2">
+            {% for creneau in creneaux %}
+            <div class="form-check">
+              <input class="form-check-input creneau-input" type="radio"
+                     name="heure" value="{{ creneau|time:'H:i' }}"
+                     id="c{{ forloop.counter }}" required>
+              <label class="creneau-btn" for="c{{ forloop.counter }}">
+                {{ creneau|time:'H:i' }}
+              </label>
+            </div>
+            {% endfor %}
+          </div>
+        </div>
+        <div class="mb-4">
+          <label class="form-label fw-semibold">Motif de consultation</label>
+          <textarea name="motif" class="form-control form-control-medibook"
+                    rows="3" required>{{ rdv.motif }}</textarea>
+        </div>
+        <div class="d-flex gap-3">
+          <button type="submit" class="btn-primary-medibook">
+            <i class="bi bi-check-circle"></i> Confirmer la modification
+          </button>
+          <a href="{% url 'mes_rdv' %}" class="btn btn-outline-secondary rounded-pill px-4">
+            Annuler
+          </a>
+        </div>
+      </form>
+      {% elif date_choisie %}
+        <div class="alert alert-warning">
+          <i class="bi bi-exclamation-triangle"></i>
+          Aucun créneau disponible pour cette date.
+        </div>
+      {% endif %}
+    </div>
+  </div>
+</div>
+{% endblock %}

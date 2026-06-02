@@ -1,0 +1,152 @@
+{% extends 'base.html' %}
+{% block title %}{{ medecin }} — MediBook{% endblock %}
+{% block content %}
+<div class="row g-4">
+    <div class="col-md-4">
+        <div class="sidebar-card">
+            <div class="sidebar-header text-center">
+                {% if medecin.photo %}
+                    <img src="{{ medecin.photo.url }}" class="doctor-avatar mb-3"
+                         style="width:110px;height:110px" alt="{{ medecin }}">
+                {% else %}
+                    <div class="doctor-avatar-placeholder mx-auto mb-3"
+                         style="width:110px;height:110px;font-size:3rem">👨‍⚕️</div>
+                {% endif %}
+                <h5 class="text-white fw-bold mb-1">{{ medecin }}</h5>
+                <span class="badge bg-success">{{ medecin.specialite }}</span>
+                <div class="mt-2">
+                    {% for i in "12345" %}
+                        {% if forloop.counter <= moyenne %}
+                            <i class="bi bi-star-fill text-warning"></i>
+                        {% else %}
+                            <i class="bi bi-star text-warning"></i>
+                        {% endif %}
+                    {% endfor %}
+                    <small class="text-white-50 ms-1">{{ moyenne }}/5 ({{ avis_list.count }} avis)</small>
+                </div>
+            </div>
+            <div class="sidebar-body">
+                <div class="doctor-info-item mb-3">
+                    <i class="bi bi-geo-alt-fill text-primary"></i>
+                    <span>{{ medecin.adresse_cabinet|default:"Non renseigné" }}</span>
+                </div>
+                <div class="doctor-info-item mb-3">
+                    <i class="bi bi-briefcase-fill text-primary"></i>
+                    <span>{{ medecin.annees_experience }} ans d'expérience</span>
+                </div>
+                <div class="doctor-info-item mb-4">
+                    <i class="bi bi-telephone-fill text-primary"></i>
+                    <span>{{ medecin.telephone_professionnel|default:"Non renseigné" }}</span>
+                </div>
+                {% if user.is_authenticated %}
+                    <a href="{% url 'prendre_rdv' medecin.pk %}"
+                       class="btn-primary-medibook w-100 d-block text-center text-decoration-none">
+                        <i class="bi bi-calendar-plus"></i> Prendre rendez-vous
+                    </a>
+                {% else %}
+                    <a href="{% url 'connexion' %}"
+                       class="btn-primary-medibook w-100 d-block text-center text-decoration-none">
+                        <i class="bi bi-box-arrow-in-right"></i> Connectez-vous
+                    </a>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-8">
+        <div class="card-medibook p-4 mb-4">
+            <h5 class="fw-bold mb-3" style="color:var(--primary)">
+                <i class="bi bi-person-lines-fill"></i> À propos
+            </h5>
+            <p class="text-muted">{{ medecin.description|default:"Aucune description disponible." }}</p>
+        </div>
+
+        <div class="card-medibook p-4 mb-4">
+            <h5 class="fw-bold mb-3" style="color:var(--primary)">
+                <i class="bi bi-clock"></i> Disponibilités
+            </h5>
+            {% if medecin.disponibilites.all %}
+                <div class="row g-2">
+                    {% for dispo in medecin.disponibilites.all %}
+                    {% if dispo.est_actif %}
+                    <div class="col-md-6">
+                        <div class="d-flex align-items-center gap-2 p-2 rounded"
+                             style="background:var(--accent)">
+                            <i class="bi bi-calendar-week text-primary"></i>
+                            <span class="fw-bold">{{ dispo.get_jour_display }}</span>
+                            <span class="text-muted ms-auto">
+                                {{ dispo.heure_debut|time:'H:i' }} — {{ dispo.heure_fin|time:'H:i' }}
+                            </span>
+                        </div>
+                    </div>
+                    {% endif %}
+                    {% endfor %}
+                </div>
+            {% else %}
+                <p class="text-muted">Disponibilités non renseignées.</p>
+            {% endif %}
+        </div>
+
+        <div class="card-medibook p-4 mb-4">
+            <h5 class="fw-bold mb-3" style="color:var(--primary)">
+                <i class="bi bi-star"></i> Avis patients ({{ avis_list.count }})
+            </h5>
+            {% if user.is_authenticated and not user_avis %}
+            <form method="post" action="{% url 'ajouter_avis' medecin.pk %}" class="mb-4 p-3 rounded"
+                  style="background:var(--accent)">
+                {% csrf_token %}
+                <h6 class="fw-bold mb-3">Laisser un avis</h6>
+                <div class="mb-3">
+                    <label class="form-label fw-semibold">Note</label>
+                    <div class="d-flex gap-2">
+                        {% for i in "12345" %}
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio"
+                                   name="note" value="{{ forloop.counter }}"
+                                   id="note{{ forloop.counter }}" required>
+                            <label class="form-check-label" for="note{{ forloop.counter }}">
+                                {{ forloop.counter }}⭐
+                            </label>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label fw-semibold">Commentaire</label>
+                    <textarea name="commentaire" class="form-control form-control-medibook"
+                              rows="3" placeholder="Votre expérience..." required></textarea>
+                </div>
+                <button type="submit" class="btn-success-medibook">
+                    <i class="bi bi-send"></i> Publier mon avis
+                </button>
+            </form>
+            {% endif %}
+
+            {% if avis_list %}
+                {% for avis in avis_list %}
+                <div class="d-flex gap-3 mb-3 p-3 rounded" style="background:var(--light-bg)">
+                    <div class="rounded-circle d-flex align-items-center justify-content-center flex-shrink-0"
+                         style="width:45px;height:45px;background:var(--accent)">
+                        <i class="bi bi-person text-primary fs-5"></i>
+                    </div>
+                    <div>
+                        <div class="fw-bold">
+                            {{ avis.patient.first_name }} {{ avis.patient.last_name }}
+                        </div>
+                        <div class="text-warning mb-1">
+                            {% for i in "12345" %}
+                                {% if forloop.counter <= avis.note %}⭐{% endif %}
+                            {% endfor %}
+                        </div>
+                        <p class="mb-1 text-muted">{{ avis.commentaire }}</p>
+                        <small class="text-muted">{{ avis.date_creation|date:'d/m/Y' }}</small>
+                    </div>
+                </div>
+                {% endfor %}
+            {% else %}
+                <p class="text-muted">Aucun avis pour le moment. Soyez le premier !</p>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}

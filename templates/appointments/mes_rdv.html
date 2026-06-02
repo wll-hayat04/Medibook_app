@@ -1,0 +1,156 @@
+{% extends 'base.html' %}
+{% block title %}Mes rendez-vous — MediBook{% endblock %}
+{% block content %}
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
+        <div class="section-divider"></div>
+        <h2 class="section-title">Mes rendez-vous</h2>
+        <p class="section-subtitle mb-0">Gérez tous vos rendez-vous médicaux</p>
+    </div>
+    <div class="d-flex gap-2">
+        <a href="{% url 'calendrier_rdv' %}" class="btn-success-medibook text-decoration-none">
+            <i class="bi bi-calendar3"></i> Vue calendrier
+        </a>
+        <a href="{% url 'liste_medecins' %}" class="btn-primary-medibook text-decoration-none">
+            <i class="bi bi-plus-circle"></i> Nouveau RDV
+        </a>
+    </div>
+</div>
+
+{% if rdv_list %}
+
+<div class="card-medibook p-3 mb-4">
+    <div class="d-flex gap-2 flex-wrap align-items-center">
+        <span class="fw-semibold text-muted me-2">Filtrer :</span>
+        <a href="{% url 'mes_rdv' %}"
+           class="btn btn-sm btn-outline-primary rounded-pill px-3">Tous</a>
+        <a href="{% url 'mes_rdv' %}?statut=en_attente"
+           class="btn btn-sm btn-outline-warning rounded-pill px-3">En attente</a>
+        <a href="{% url 'mes_rdv' %}?statut=confirme"
+           class="btn btn-sm btn-outline-success rounded-pill px-3">Confirmés</a>
+        <a href="{% url 'mes_rdv' %}?statut=annule"
+           class="btn btn-sm btn-outline-danger rounded-pill px-3">Annulés</a>
+        <a href="{% url 'mes_rdv' %}?statut=termine"
+           class="btn btn-sm btn-outline-secondary rounded-pill px-3">Terminés</a>
+    </div>
+</div>
+
+<div class="card-medibook">
+    <div class="table-responsive">
+        <table class="table table-medibook mb-0">
+            <thead>
+                <tr>
+                    <th>Médecin</th>
+                    <th>Spécialité</th>
+                    <th>Date</th>
+                    <th>Heure</th>
+                    <th>Motif</th>
+                    <th>Statut</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for rdv in rdv_list %}
+                <tr>
+                    <td>
+                        <div class="d-flex align-items-center gap-2">
+                            <div class="rounded-circle d-flex align-items-center justify-content-center flex-shrink-0"
+                                 style="width:35px;height:35px;background:var(--accent)">
+                                <i class="bi bi-person-badge text-primary"></i>
+                            </div>
+                            <span class="fw-semibold">{{ rdv.medecin }}</span>
+                        </div>
+                    </td>
+                    <td>
+                        <span class="badge-specialite" style="font-size:0.75rem">
+                            {{ rdv.specialite }}
+                        </span>
+                    </td>
+                    <td>
+                        <span class="fw-bold text-primary">
+                            {{ rdv.date|date:'d/m/Y' }}
+                        </span>
+                    </td>
+                    <td>
+                        <i class="bi bi-clock text-muted"></i>
+                        {{ rdv.heure|time:'H:i' }}
+                    </td>
+                    <td>
+                        <span class="text-muted">
+                            {{ rdv.motif|truncatechars:25 }}
+                        </span>
+                    </td>
+                    <td>
+                        {% if rdv.statut == 'confirme' %}
+                            <span class="badge-confirme">
+                                <i class="bi bi-check-circle"></i> Confirmé
+                            </span>
+                        {% elif rdv.statut == 'en_attente' %}
+                            <span class="badge-en_attente">
+                                <i class="bi bi-clock"></i> En attente
+                            </span>
+                        {% elif rdv.statut == 'annule' %}
+                            <span class="badge-annule">
+                                <i class="bi bi-x-circle"></i> Annulé
+                            </span>
+                        {% elif rdv.statut == 'termine' %}
+                            <span class="badge-termine">
+                                <i class="bi bi-check-all"></i> Terminé
+                            </span>
+                        {% elif rdv.statut == 'absent' %}
+                            <span class="badge bg-dark text-white px-2 py-1 rounded-pill"
+                                  style="font-size:0.8rem">
+                                <i class="bi bi-person-x"></i> Absent
+                            </span>
+                        {% endif %}
+                    </td>
+                    <td>
+                        <div class="d-flex gap-1">
+                            <a href="{% url 'detail_rdv' rdv.pk %}"
+                               class="btn btn-sm btn-outline-primary"
+                               title="Voir détail">
+                                <i class="bi bi-eye"></i>
+                            </a>
+                            {% if rdv.statut == 'en_attente' or rdv.statut == 'confirme' %}
+                                <a href="{% url 'modifier_rdv' rdv.pk %}"
+                                   class="btn btn-sm btn-outline-warning"
+                                   title="Modifier">
+                                    <i class="bi bi-pencil"></i>
+                                </a>
+                                <a href="{% url 'annuler_rdv' rdv.pk %}"
+                                   class="btn btn-sm btn-outline-danger"
+                                   title="Annuler"
+                                   onclick="return confirm('Voulez-vous annuler ce rendez-vous ?')">
+                                    <i class="bi bi-x-circle"></i>
+                                </a>
+                            {% endif %}
+                        </div>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+{% else %}
+<div class="card-medibook p-5 text-center">
+    <div style="font-size:5rem">📅</div>
+    <h4 class="mt-3 fw-bold" style="color:var(--primary)">Aucun rendez-vous</h4>
+    <p class="text-muted mb-4">
+        Vous n'avez pas encore de rendez-vous.
+        Trouvez un médecin et prenez votre premier RDV !
+    </p>
+    <div class="d-flex gap-3 justify-content-center">
+        <a href="{% url 'liste_medecins' %}" class="btn-primary-medibook text-decoration-none">
+            <i class="bi bi-search"></i> Trouver un médecin
+        </a>
+        <a href="{% url 'ai_orientation' %}" class="btn-success-medibook text-decoration-none">
+            <i class="bi bi-robot"></i> Orientation IA
+        </a>
+    </div>
+</div>
+{% endif %}
+
+{% endblock %}

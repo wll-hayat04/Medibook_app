@@ -1,0 +1,66 @@
+{% extends 'base.html' %}
+{% block title %}Inscription Medecin - MediBook{% endblock %}
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-6">
+        <div class="card-medibook p-4">
+            <div class="text-center mb-4">
+                <div style="font-size:3rem">&#x1F9B9;</div>
+                <h3 class="fw-bold" style="color:var(--primary)">Inscription Medecin</h3>
+                <p class="text-muted">Rejoignez MediBook en tant que medecin</p>
+            </div>
+            <form method="post">
+                {% csrf_token %}
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label fw-semibold">Prenom</label>
+                        <input type="text" name="prenom" class="form-control form-control-medibook" required>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label fw-semibold">Nom</label>
+                        <input type="text" name="nom" class="form-control form-control-medibook" required>
+                    </div>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label fw-semibold">Nom utilisateur</label>
+                    <input type="text" name="username" class="form-control form-control-medibook" required>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label fw-semibold">Email</label>
+                    <input type="email" name="email" class="form-control form-control-medibook" required>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label fw-semibold">Telephone</label>
+                    <input type="text" name="telephone" class="form-control form-control-medibook" required>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label fw-semibold">Specialite</label>
+                    <select name="specialite" class="form-control form-control-medibook" required>
+                        <option value="">Choisir une specialite</option>
+                        {% for s in specialites %}
+                        <option value="{{ s.id }}">{{ s.nom }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label fw-semibold">Mot de passe</label>
+                    <input type="password" name="password1" class="form-control form-control-medibook" required>
+                </div>
+                <div class="mb-4">
+                    <label class="form-label fw-semibold">Confirmer mot de passe</label>
+                    <input type="password" name="password2" class="form-control form-control-medibook" required>
+                </div>
+                <button type="submit" class="btn-primary-medibook w-100">
+                    <i class="bi bi-person-plus"></i> Creer mon compte
+                </button>
+            </form>
+            <p class="text-center mt-3 text-muted">
+                Deja un compte ? <a href="{% url 'connexion' %}" style="color:var(--primary)">Se connecter</a>
+            </p>
+            <p class="text-center mt-2 text-muted">
+                Vous etes patient ? <a href="{% url 'inscription' %}" style="color:var(--primary)">Inscription patient</a>
+            </p>
+        </div>
+    </div>
+</div>
+{% endblock %}

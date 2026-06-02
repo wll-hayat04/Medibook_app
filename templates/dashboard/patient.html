@@ -1,0 +1,175 @@
+{% extends 'base.html' %}
+{% block title %}Mon espace — MediBook{% endblock %}
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
+        <div class="section-divider"></div>
+        <h2 class="section-title">Bonjour {{ user.first_name }} 👋</h2>
+        <p class="section-subtitle mb-0">Bienvenue sur votre espace patient</p>
+    </div>
+    <a href="{% url 'profil' %}" class="btn-primary-medibook text-decoration-none">
+        <i class="bi bi-person-gear"></i> Mon profil
+    </a>
+</div>
+
+<div class="row g-3 mb-4">
+    <div class="col-md-3">
+        <div class="stat-card position-relative">
+            <div class="stat-card-icon">📅</div>
+            <div class="stat-card-number">{{ total_rdv }}</div>
+            <div class="stat-card-label">Total rendez-vous</div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="stat-card green position-relative">
+            <div class="stat-card-icon">✅</div>
+            <div class="stat-card-number">{{ rdv_a_venir.count }}</div>
+            <div class="stat-card-label">À venir</div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="stat-card red position-relative">
+            <div class="stat-card-icon">❌</div>
+            <div class="stat-card-number">{{ rdv_annules }}</div>
+            <div class="stat-card-label">Annulés</div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="stat-card orange position-relative">
+            <div class="stat-card-icon">🤖</div>
+            <div class="stat-card-number">IA</div>
+            <div class="stat-card-label">
+                <a href="{% url 'ai_orientation' %}" style="color:var(--warning)">Orientation</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row g-4">
+    <div class="col-md-8">
+        <div class="card-medibook p-4 mb-4">
+            <h5 class="fw-bold mb-3" style="color:var(--primary)">
+                <i class="bi bi-calendar-check"></i> Prochains rendez-vous
+            </h5>
+            {% if rdv_a_venir %}
+                {% for rdv in rdv_a_venir %}
+                <div class="d-flex justify-content-between align-items-center p-3 mb-2 rounded"
+                     style="background:var(--light-bg)">
+                    <div class="d-flex align-items-center gap-3">
+                        <div class="rounded-circle d-flex align-items-center justify-content-center"
+                             style="width:45px;height:45px;background:var(--accent)">
+                            <i class="bi bi-person-badge text-primary fs-5"></i>
+                        </div>
+                        <div>
+                            <div class="fw-bold">{{ rdv.medecin }}</div>
+                            <small class="text-muted">{{ rdv.specialite }} — {{ rdv.motif|truncatechars:30 }}</small>
+                        </div>
+                    </div>
+                    <div class="text-end">
+                        <div class="fw-bold text-primary">{{ rdv.date|date:'d/m/Y' }}</div>
+                        <small class="text-muted">{{ rdv.heure|time:'H:i' }}</small>
+                        <div class="mt-1">
+                            {% if rdv.statut == 'confirme' %}
+                                <span class="badge-confirme">Confirmé</span>
+                            {% else %}
+                                <span class="badge-en_attente">En attente</span>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+                <a href="{% url 'mes_rdv' %}" class="btn-primary-medibook d-inline-block mt-2 text-decoration-none">
+                    Voir tous mes RDV <i class="bi bi-arrow-right"></i>
+                </a>
+            {% else %}
+                <div class="text-center py-4">
+                    <div style="font-size:3rem">📅</div>
+                    <p class="text-muted mt-2">Aucun rendez-vous à venir</p>
+                    <a href="{% url 'liste_medecins' %}" class="btn-primary-medibook text-decoration-none">
+                        Prendre un RDV
+                    </a>
+                </div>
+            {% endif %}
+        </div>
+
+        <div class="card-medibook p-4">
+            <h5 class="fw-bold mb-3" style="color:var(--primary)">
+                <i class="bi bi-clock-history"></i> Rendez-vous passés
+            </h5>
+            {% if rdv_passes %}
+                <div class="table-responsive">
+                    <table class="table table-medibook">
+                        <thead>
+                            <tr><th>Médecin</th><th>Spécialité</th><th>Date</th><th>Statut</th></tr>
+                        </thead>
+                        <tbody>
+                            {% for rdv in rdv_passes %}
+                            <tr>
+                                <td>{{ rdv.medecin }}</td>
+                                <td>{{ rdv.specialite }}</td>
+                                <td>{{ rdv.date|date:'d/m/Y' }}</td>
+                                <td><span class="badge-{{ rdv.statut }}">{{ rdv.get_statut_display }}</span></td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            {% else %}
+                <p class="text-muted">Aucun rendez-vous passé.</p>
+            {% endif %}
+        </div>
+    </div>
+
+    <div class="col-md-4">
+        <div class="card-medibook p-4 mb-4">
+            <h5 class="fw-bold mb-3" style="color:var(--primary)">
+                <i class="bi bi-pie-chart"></i> Mes RDV par statut
+            </h5>
+            <canvas id="rdvChart" height="200"></canvas>
+        </div>
+
+        <div class="card-medibook p-4 mb-4">
+            <h5 class="fw-bold mb-3" style="color:var(--primary)">Actions rapides</h5>
+            <div class="d-grid gap-2">
+                <a href="{% url 'liste_medecins' %}" class="btn-primary-medibook text-decoration-none text-center">
+                    <i class="bi bi-search"></i> Trouver un médecin
+                </a>
+                <a href="{% url 'mes_rdv' %}" class="btn-success-medibook text-decoration-none text-center">
+                    <i class="bi bi-calendar-check"></i> Mes rendez-vous
+                </a>
+                <a href="{% url 'ai_orientation' %}" class="text-decoration-none text-center p-2 rounded fw-bold"
+                   style="background:#0f3460;color:white">
+                    <i class="bi bi-robot"></i> Orientation IA
+                </a>
+                <a href="{% url 'profil' %}" class="text-decoration-none text-center p-2 rounded fw-bold"
+                   style="background:var(--light-bg);color:var(--primary)">
+                    <i class="bi bi-person-gear"></i> Mon profil
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+const statuts = {{ statuts_json|safe }};
+new Chart(document.getElementById('rdvChart'), {
+    type: 'doughnut',
+    data: {
+        labels: Object.keys(statuts),
+        datasets: [{
+            data: Object.values(statuts),
+            backgroundColor: ['#f39c12','#27ae60','#e74c3c','#3498db'],
+            borderWidth: 2,
+            borderColor: '#fff'
+        }]
+    },
+    options: {
+        responsive: true,
+        plugins: {
+            legend: { position: 'bottom', labels: { padding: 15, font: { size: 12 } } }
+        }
+    }
+});
+</script>
+{% endblock %}

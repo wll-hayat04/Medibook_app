@@ -1,0 +1,9 @@
+def medecin_signup(request):
+    if request.method == 'POST':
+        form = MedecinSignUpForm(request.POST)
+        if form.is_valid():
+            form.save()  # ça suffit
+            return redirect('dashboard')  # ou page d'accueil médecin
+    else:
+        form = MedecinSignUpForm()
+    return render(request, 'doctors/signup.html', {'form': form})

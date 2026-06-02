@@ -1,0 +1,94 @@
+{% extends "base.html" %}
+{% block title %}Mes disponibilites - MediBook{% endblock %}
+{% block content %}
+<div class="container mt-4">
+    <h2 class="fw-bold mb-4"><i class="bi bi-calendar-check"></i> Mes disponibilites</h2>
+
+    {% if messages %}
+        {% for msg in messages %}
+            <div class="alert alert-{{ msg.tags }}">{{ msg }}</div>
+        {% endfor %}
+    {% endif %}
+
+    <div class="row">
+        <div class="col-md-5">
+            <div class="card-medibook p-4 mb-4">
+                <h5 class="fw-bold mb-3">Ajouter une disponibilite</h5>
+                <form method="post">
+                    {% csrf_token %}
+                    <input type="hidden" name="action" value="ajouter">
+                    <div class="mb-3">
+                        <label class="form-label fw-semibold">Jour</label>
+                        <select name="jour" class="form-control form-control-medibook" required>
+                            {% for num, nom in jours %}
+                            <option value="{{ num }}">{{ nom }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label fw-semibold">Heure debut</label>
+                        <input type="time" name="heure_debut" class="form-control form-control-medibook" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label fw-semibold">Heure fin</label>
+                        <input type="time" name="heure_fin" class="form-control form-control-medibook" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label fw-semibold">Duree RDV (minutes)</label>
+                        <select name="duree_rdv" class="form-control form-control-medibook">
+                            <option value="15">15 min</option>
+                            <option value="30" selected>30 min</option>
+                            <option value="45">45 min</option>
+                            <option value="60">1 heure</option>
+                        </select>
+                    </div>
+                    <button type="submit" class="btn-primary-medibook w-100">
+                        <i class="bi bi-plus-circle"></i> Ajouter
+                    </button>
+                </form>
+            </div>
+        </div>
+
+        <div class="col-md-7">
+            <div class="card-medibook p-4">
+                <h5 class="fw-bold mb-3">Mes creneaux</h5>
+                {% if disponibilites %}
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Jour</th>
+                                <th>Debut</th>
+                                <th>Fin</th>
+                                <th>Duree RDV</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for d in disponibilites %}
+                            <tr>
+                                <td>{{ d.get_jour_display }}</td>
+                                <td>{{ d.heure_debut }}</td>
+                                <td>{{ d.heure_fin }}</td>
+                                <td>{{ d.duree_rdv }} min</td>
+                                <td>
+                                    <form method="post" style="display:inline">
+                                        {% csrf_token %}
+                                        <input type="hidden" name="action" value="supprimer">
+                                        <input type="hidden" name="dispo_id" value="{{ d.id }}">
+                                        <button type="submit" class="btn btn-danger btn-sm">
+                                            <i class="bi bi-trash"></i>
+                                        </button>
+                                    </form>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                {% else %}
+                    <p class="text-muted">Aucune disponibilite ajoutee.</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

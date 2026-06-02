@@ -1,0 +1,104 @@
+{% extends 'base.html' %}
+{% block title %}Détail RDV — MediBook{% endblock %}
+{% block content %}
+<div class="row justify-content-center">
+  <div class="col-md-7">
+
+    <div class="d-flex justify-content-between align-items-center mb-4">
+      <div>
+        <div class="section-divider"></div>
+        <h2 class="section-title">Détail du rendez-vous</h2>
+      </div>
+      <button onclick="window.print()" class="btn-success-medibook">
+        <i class="bi bi-printer"></i> Imprimer
+      </button>
+    </div>
+
+    <div class="card-medibook p-4" id="rdv-print">
+      <div class="text-center mb-4 pb-3" style="border-bottom:2px solid var(--light-bg)">
+        <h4 class="fw-bold" style="color:var(--primary)">
+          <i class="bi bi-heart-pulse-fill"></i> MediBook
+        </h4>
+        <p class="text-muted mb-0">Confirmation de rendez-vous médical</p>
+      </div>
+
+      <div class="row g-3">
+        <div class="col-md-6">
+          <div class="p-3 rounded" style="background:var(--accent)">
+            <h6 class="fw-bold mb-3" style="color:var(--primary)">
+              <i class="bi bi-person"></i> Patient
+            </h6>
+            <p class="mb-1"><strong>{{ rdv.patient.first_name }} {{ rdv.patient.last_name }}</strong></p>
+            <p class="mb-1 text-muted small">{{ rdv.patient.email }}</p>
+            <p class="mb-0 text-muted small">{{ rdv.patient.telephone }}</p>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="p-3 rounded" style="background:var(--accent)">
+            <h6 class="fw-bold mb-3" style="color:var(--primary)">
+              <i class="bi bi-person-badge"></i> Médecin
+            </h6>
+            <p class="mb-1"><strong>{{ rdv.medecin }}</strong></p>
+            <p class="mb-1 text-muted small">{{ rdv.specialite }}</p>
+            <p class="mb-0 text-muted small">{{ rdv.medecin.adresse_cabinet }}</p>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="p-3 rounded" style="background:var(--light-bg)">
+            <h6 class="fw-bold mb-3" style="color:var(--primary)">
+              <i class="bi bi-calendar"></i> Date et heure
+            </h6>
+            <p class="mb-1 fs-5 fw-bold text-primary">{{ rdv.date|date:'d/m/Y' }}</p>
+            <p class="mb-0 text-muted">{{ rdv.heure|time:'H:i' }}</p>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="p-3 rounded" style="background:var(--light-bg)">
+            <h6 class="fw-bold mb-3" style="color:var(--primary)">
+              <i class="bi bi-info-circle"></i> Statut
+            </h6>
+            <span class="badge-{{ rdv.statut }} fs-6">{{ rdv.get_statut_display }}</span>
+          </div>
+        </div>
+        <div class="col-12">
+          <div class="p-3 rounded" style="background:var(--light-bg)">
+            <h6 class="fw-bold mb-2" style="color:var(--primary)">
+              <i class="bi bi-chat-text"></i> Motif de consultation
+            </h6>
+            <p class="mb-0">{{ rdv.motif }}</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="text-center mt-4 pt-3" style="border-top:2px solid var(--light-bg)">
+        <small class="text-muted">
+          RDV créé le {{ rdv.date_creation|date:'d/m/Y à H:i' }} —
+          Référence #{{ rdv.pk }}
+        </small>
+      </div>
+    </div>
+
+    <div class="d-flex gap-3 mt-3">
+      <a href="{% url 'mes_rdv' %}" class="btn-primary-medibook text-decoration-none">
+        <i class="bi bi-arrow-left"></i> Mes rendez-vous
+      </a>
+      {% if rdv.statut in 'en_attente,confirme' %}
+      <a href="{% url 'annuler_rdv' rdv.pk %}"
+         class="text-decoration-none p-2 px-3 rounded fw-bold"
+         style="background:#f8d7da;color:#842029"
+         onclick="return confirm('Annuler ce RDV ?')">
+        <i class="bi bi-x-circle"></i> Annuler
+      </a>
+      {% endif %}
+    </div>
+  </div>
+</div>
+
+<style>
+@media print {
+    nav, footer, .d-flex.gap-3, button { display: none !important; }
+    body { background: white !important; }
+    .card-medibook { box-shadow: none !important; }
+}
+</style>
+{% endblock %}

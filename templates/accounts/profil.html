@@ -1,0 +1,128 @@
+{% extends 'base.html' %}
+{% load static custom_filters %}
+{% block title %}Mon profil — MediBook{% endblock %}
+{% block content %}
+<div class="row g-4">
+  <div class="col-md-4">
+    <div class="sidebar-card">
+      <div class="sidebar-header text-center">
+        {% if user.photo %}
+          <img src="{{ user.photo.url }}" class="doctor-avatar mb-3"
+               style="width:110px;height:110px" alt="photo">
+        {% else %}
+          <div class="doctor-avatar-placeholder mx-auto mb-3"
+               style="width:110px;height:110px;font-size:3rem">
+            {{ user.first_name|first|upper }}{{ user.last_name|first|upper }}
+          </div>
+        {% endif %}
+        <h5 class="text-white fw-bold">{{ user.first_name }} {{ user.last_name }}</h5>
+        <span class="badge bg-success">{{ user.get_role_display }}</span>
+      </div>
+      <div class="sidebar-body">
+        <div class="doctor-info-item mb-2">
+          <i class="bi bi-envelope text-primary"></i> {{ user.email|default:"Non renseigné" }}
+        </div>
+        <div class="doctor-info-item mb-2">
+          <i class="bi bi-telephone text-primary"></i> {{ user.telephone|default:"Non renseigné" }}
+        </div>
+        <div class="doctor-info-item mb-2">
+          <i class="bi bi-person text-primary"></i> {{ user.username }}
+        </div>
+        {% if user.role == 'patient' %}
+        <div class="doctor-info-item mb-2">
+          <i class="bi bi-droplet text-danger"></i>
+          {{ profil_patient.groupe_sanguin|default:"Groupe sanguin non renseigné" }}
+        </div>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+
+  <div class="col-md-8">
+    <div class="card-medibook p-4">
+      <h5 class="fw-bold mb-4" style="color:var(--primary)">
+        <i class="bi bi-pencil-square"></i> Modifier mon profil
+      </h5>
+      <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        <div class="row">
+          <div class="col-md-6 mb-3">
+            <label class="form-label fw-semibold">Prénom</label>
+            <input type="text" name="prenom" class="form-control form-control-medibook"
+                   value="{{ user.first_name }}">
+          </div>
+          <div class="col-md-6 mb-3">
+            <label class="form-label fw-semibold">Nom</label>
+            <input type="text" name="nom" class="form-control form-control-medibook"
+                   value="{{ user.last_name }}">
+          </div>
+        </div>
+        <div class="mb-3">
+          <label class="form-label fw-semibold">Email</label>
+          <input type="email" name="email" class="form-control form-control-medibook"
+                 value="{{ user.email }}">
+        </div>
+        <div class="mb-3">
+          <label class="form-label fw-semibold">Téléphone</label>
+          <input type="text" name="telephone" class="form-control form-control-medibook"
+                 value="{{ user.telephone }}">
+        </div>
+
+        {% if profil_patient %}
+        <div class="row">
+          <div class="col-md-6 mb-3">
+            <label class="form-label fw-semibold">Date de naissance</label>
+            <input type="date" name="date_naissance" class="form-control form-control-medibook"
+                   value="{{ profil_patient.date_naissance|date:'Y-m-d'|default:'' }}">
+          </div>
+          <div class="col-md-6 mb-3">
+            <label class="form-label fw-semibold">Groupe sanguin</label>
+            <select name="groupe_sanguin" class="form-select form-control-medibook">
+              <option value="">--</option>
+              {% for g in "A+,A-,B+,B-,AB+,AB-,O+,O-"|split:"," %}
+                <option value="{{ g }}" {% if profil_patient.groupe_sanguin == g %}selected{% endif %}>{{ g }}</option>
+              {% endfor %}
+            </select>
+          </div>
+        </div>
+        <div class="mb-3">
+          <label class="form-label fw-semibold">Adresse</label>
+          <textarea name="adresse" class="form-control form-control-medibook"
+                    rows="2">{{ profil_patient.adresse }}</textarea>
+        </div>
+        {% endif %}
+
+        <div class="mb-4">
+          <label class="form-label fw-semibold">Photo de profil</label>
+          <div class="photo-upload-area" onclick="document.getElementById('photoInput').click()">
+            <i class="bi bi-camera fs-3 text-primary"></i>
+            <p class="mb-0 mt-2 text-muted">Cliquez pour changer votre photo</p>
+            <small class="text-muted">JPG, PNG — max 2MB</small>
+          </div>
+          <input type="file" id="photoInput" name="photo" accept="image/*"
+                 class="d-none" onchange="previewPhoto(this)">
+          <img id="photoPreview" class="photo-preview mt-3 d-none">
+        </div>
+
+        <button type="submit" class="btn-primary-medibook">
+          <i class="bi bi-check-circle"></i> Sauvegarder les modifications
+        </button>
+      </form>
+    </div>
+  </div>
+</div>
+
+<script>
+function previewPhoto(input) {
+    if (input.files && input.files[0]) {
+        const reader = new FileReader();
+        reader.onload = e => {
+            const preview = document.getElementById('photoPreview');
+            preview.src = e.target.result;
+            preview.classList.remove('d-none');
+        };
+        reader.readAsDataURL(input.files[0]);
+    }
+}
+</script>
+{% endblock %}
