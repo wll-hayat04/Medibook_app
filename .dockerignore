@@ -1,9 +1,13 @@
+.git
+.github
+.gitignore
+Medibook_app/
 venv/
 __pycache__/
 *.pyc
 *.pyo
-*.pyd
-*.sqlite3
-*.log
 .env
-.git
+db.sqlite3
+media/
+staticfiles/
+*.log
