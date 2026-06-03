@@ -36,10 +36,7 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
-
-    # Pour servir les fichiers statiques avec Docker/Gunicorn
     'whitenoise.middleware.WhiteNoiseMiddleware',
-
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -68,7 +65,7 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'medibook_project.wsgi.application'
 
-if os.getenv('DB_HOST') == 'db':
+if os.getenv('DB_HOST'):
     DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.postgresql',
@@ -118,4 +115,7 @@ LOGOUT_REDIRECT_URL = '/'
 
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 DEFAULT_FROM_EMAIL = 'MediBook <noreply@medibook.ma>'
-CSRF_TRUSTED_ORIGINS = ["https://medibook-production-ec9a.up.railway.app"]
+
+CSRF_TRUSTED_ORIGINS = ['https://medibook-production-ec9a.up.railway.app']
+
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
