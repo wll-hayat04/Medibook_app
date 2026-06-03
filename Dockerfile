@@ -18,4 +18,7 @@ COPY . .
 
 EXPOSE 8091
 
-CMD ["sh", "-c", "python manage.py migrate && python manage.py collectstatic --noinput && gunicorn medibook_project.wsgi:application --bind 0.0.0.0:8091"]
+CMD ["sh", "-c", "python manage.py migrate && \
+                   python manage.py loaddata fixtures/initial_data.json || true && \
+                   python manage.py collectstatic --noinput && \
+                   gunicorn medibook_project.wsgi:application --bind 0.0.0.0:8091 --workers 3"]
