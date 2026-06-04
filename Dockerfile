@@ -16,6 +16,6 @@ RUN pip install -r requirements.txt
 
 COPY . .
 
-EXPOSE 8091
+EXPOSE 7009
 
 CMD ["sh", "-c", "python manage.py migrate && python manage.py loaddata fixtures/initial_data.json && python manage.py collectstatic --noinput && gunicorn medibook_project.wsgi:application --bind 0.0.0.0:${PORT:-8091}"]
