@@ -43,9 +43,3 @@ volumes:
   static_volume:
   media_volume:
 
-networks:
-  medibooknet:
-    driver: bridge
-    ipam:
-      config:
-        - subnet: 172.30.0.0/16
