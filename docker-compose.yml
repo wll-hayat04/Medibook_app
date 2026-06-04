@@ -1,13 +1,15 @@
-﻿services:
+﻿version: '3.9'
+
+services:
   web:
     build: .
-    restart: always
+    container_name: medibook-web
     command: >
       sh -c "
         python manage.py migrate &&
         python manage.py loaddata fixtures/initial_data.json || true &&
-        python add_medecins.py || true &&
         python manage.py collectstatic --noinput &&
+        python add_medecins.py || true &&
         gunicorn medibook_project.wsgi:application --bind 0.0.0.0:7009 --workers 3
       "
     ports:
@@ -15,30 +17,35 @@
     depends_on:
       - db
     environment:
-      SECRET_KEY: "${SECRET_KEY}"
+      DJANGO_SECRET_KEY: "ton_secret_key"
       DEBUG: "False"
-      DB_NAME: "${DB_NAME}"
-      DB_USER: "${DB_USER}"
-      DB_PASSWORD: "${DB_PASSWORD}"
-      DB_HOST: "db"
-      DB_PORT: "${DB_PORT}"
-      ALLOWED_HOSTS: "${ALLOWED_HOSTS}"
-      CSRF_TRUSTED_ORIGINS: "${CSRF_TRUSTED_ORIGINS}"
+      DATABASE_URL: "postgres://medibook_user:medibook_pass@db:5432/medibook_db"
     volumes:
-      - static_volume:/app/staticfiles
+      - static_volume:/app/static
       - media_volume:/app/media
+    networks:
+      - medibooknet
 
   db:
     image: postgres:15
-    restart: always
+    container_name: medibook-db
     environment:
-      POSTGRES_DB: "${DB_NAME}"
-      POSTGRES_USER: "${DB_USER}"
-      POSTGRES_PASSWORD: "${DB_PASSWORD}"
+      POSTGRES_DB: medibook_db
+      POSTGRES_USER: medibook_user
+      POSTGRES_PASSWORD: medibook_pass
     volumes:
       - db_data:/var/lib/postgresql/data
+    networks:
+      - medibooknet
 
 volumes:
   db_data:
   static_volume:
   media_volume:
+
+networks:
+  medibooknet:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.30.0.0/16
