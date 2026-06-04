@@ -27,9 +27,6 @@
     volumes:
       - static_volume:/app/staticfiles
       - media_volume:/app/media
-    networks:
-      medibook_net:
-        ipv4_address: 10.50.0.10
 
   db:
     image: postgres:15
@@ -40,9 +37,6 @@
       POSTGRES_PASSWORD: "${DB_PASSWORD}"
     volumes:
       - db_data:/var/lib/postgresql/data
-    networks:
-      medibook_net:
-        ipv4_address: 10.50.0.11
 
 volumes:
   db_data:
@@ -50,9 +44,9 @@ volumes:
   media_volume:
 
 networks:
-  medibook_net:
+  default:
     name: medibook_net_custom
     driver: bridge
     ipam:
       config:
-        - subnet: 10.50.0.0/24
+        - subnet: 10.60.0.0/24
