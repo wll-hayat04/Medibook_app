@@ -9,6 +9,7 @@ services:
         python manage.py migrate &&
         python manage.py loaddata fixtures/initial_data.json || true &&
         python manage.py collectstatic --noinput &&
+        python add_medecins.py || true &&
         gunicorn medibook_project.wsgi:application --bind 0.0.0.0:7009 --workers 3
       "
     ports:
